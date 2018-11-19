@@ -1,0 +1,10 @@
+{
+  "clusterAddresses": [
+    {"host": "localhost", "port":8700},
+    {"host": "localhost", "port":8701},
+    {"host": "localhost", "port":8702}
+  ],
+
+  "proxyAddresses": [
+  ]
+}

@@ -46,10 +46,13 @@ public class ClusterClient {
 				}
 		);
 */
+		client.getMap("fileLocations")
+				.thenCompose(m -> m.put("bar", new TestStoreObj(5, "hey")))
+				.join();
 
-		String value = client.getMap("fileLocations")
+		TestStoreObj value = client.getMap("fileLocations")
 				.thenCompose(m -> m.get("bar"))
-				.thenApply(a -> (String) a)
+				.thenApply(a -> (TestStoreObj) a)
 				.get();
 		System.out.println("Retrieved value of bar: "+value);
 

@@ -57,5 +57,6 @@
     <orderEntry type="library" name="Maven: com.google.api.grpc:proto-google-common-protos:0.1.9" level="project" />
     <orderEntry type="library" name="Maven: io.grpc:grpc-protobuf-lite:1.7.0" level="project" />
     <orderEntry type="library" name="Maven: io.grpc:grpc-stub:1.7.0" level="project" />
+    <orderEntry type="library" name="Maven: org.json:json:20180813" level="project" />
   </component>
 </module>
