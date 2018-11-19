@@ -7,9 +7,12 @@ import io.grpc.stub.StreamObserver;
 public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceImplBase {
 
 	private AtomixClient raftClient;
-	public InternalFileTransferImpl(AtomixClient client){
+	private HeartbeatService heartbeat;
+
+	public InternalFileTransferImpl(AtomixClient client, HeartbeatService hbService){
 		super();
 		raftClient = client;
+		heartbeat = hbService;
 	}
 
 	//Liveliness (This file sends the message to proxies)

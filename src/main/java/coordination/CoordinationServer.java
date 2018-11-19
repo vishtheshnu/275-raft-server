@@ -24,14 +24,22 @@ public class CoordinationServer {
 		//Connect with raft server
 		client.connect(clusterAddresses).join();
 
+		//testConnection(client);
+
+		//Initialize Heartbeat service
+		HeartbeatService hbservice = new HeartbeatService();
+		hbservice.startHeartbeatService();
+
 		//Initialize gRPC server
-		grpcServer = new GrpcServer(client);
+		grpcServer = new GrpcServer(client, hbservice);
 		grpcServer.startServer();
+
+		System.out.println("Created grpc server! Now testing connection to raft server");
 
 
 	}
 
-	public void testConnection(AtomixClient client) throws Exception{
+	public static void testConnection(AtomixClient client) throws Exception{
 		client.getMap("fileLocations")
 				.thenCompose(m -> m.put("bar", new TestStoreObj(5, "hey")))
 				.join();

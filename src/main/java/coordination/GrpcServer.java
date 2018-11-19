@@ -15,9 +15,9 @@ public class GrpcServer{
 	private Server server;
 	private AtomixClient raftClient;
 
-	public GrpcServer(AtomixClient client){
+	public GrpcServer(AtomixClient client, HeartbeatService hbService){
 		server = ServerBuilder.forPort(Config.coordServerPort)
-				.addService(new InternalFileTransferImpl(raftClient))
+				.addService(new InternalFileTransferImpl(raftClient, hbService))
 				.addService(new ExternalFileTransferImpl(raftClient))
 				.build();
 		raftClient = client;
