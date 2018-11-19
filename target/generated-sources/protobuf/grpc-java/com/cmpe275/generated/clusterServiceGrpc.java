@@ -66,6 +66,32 @@ public final class clusterServiceGrpc {
               com.cmpe275.generated.FileResponse.getDefaultInstance()))
           .setSchemaDescriptor(new clusterServiceMethodDescriptorSupplier("isFilePresent"))
           .build();
+  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  public static final io.grpc.MethodDescriptor<com.cmpe275.generated.FileUploadRequest,
+      com.cmpe275.generated.FileResponse> METHOD_INITIATE_FILE_UPLOAD =
+      io.grpc.MethodDescriptor.<com.cmpe275.generated.FileUploadRequest, com.cmpe275.generated.FileResponse>newBuilder()
+          .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+          .setFullMethodName(generateFullMethodName(
+              "grpc.clusterService", "initiateFileUpload"))
+          .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+              com.cmpe275.generated.FileUploadRequest.getDefaultInstance()))
+          .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+              com.cmpe275.generated.FileResponse.getDefaultInstance()))
+          .setSchemaDescriptor(new clusterServiceMethodDescriptorSupplier("initiateFileUpload"))
+          .build();
+  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  public static final io.grpc.MethodDescriptor<com.cmpe275.generated.Chunk,
+      com.cmpe275.generated.ChunkAck> METHOD_UPLOAD_FILE_CHUNK =
+      io.grpc.MethodDescriptor.<com.cmpe275.generated.Chunk, com.cmpe275.generated.ChunkAck>newBuilder()
+          .setType(io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
+          .setFullMethodName(generateFullMethodName(
+              "grpc.clusterService", "uploadFileChunk"))
+          .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+              com.cmpe275.generated.Chunk.getDefaultInstance()))
+          .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+              com.cmpe275.generated.ChunkAck.getDefaultInstance()))
+          .setSchemaDescriptor(new clusterServiceMethodDescriptorSupplier("uploadFileChunk"))
+          .build();
 
   /**
    * Creates a new async stub that supports all call types for the service
@@ -126,6 +152,29 @@ public final class clusterServiceGrpc {
       asyncUnimplementedUnaryCall(METHOD_IS_FILE_PRESENT, responseObserver);
     }
 
+    /**
+     * <pre>
+     * ADDITIONAL INFO:
+     * this is the new file upload rpc
+     * implementing this one instead of the one in the file_transfer.proto file
+     * </pre>
+     */
+    public void initiateFileUpload(com.cmpe275.generated.FileUploadRequest request,
+        io.grpc.stub.StreamObserver<com.cmpe275.generated.FileResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(METHOD_INITIATE_FILE_UPLOAD, responseObserver);
+    }
+
+    /**
+     * <pre>
+     * this is the new file chunk upload rpc
+     * implement this one instead of the one in the file_transfer.proto file
+     * </pre>
+     */
+    public io.grpc.stub.StreamObserver<com.cmpe275.generated.Chunk> uploadFileChunk(
+        io.grpc.stub.StreamObserver<com.cmpe275.generated.ChunkAck> responseObserver) {
+      return asyncUnimplementedStreamingCall(METHOD_UPLOAD_FILE_CHUNK, responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -149,6 +198,20 @@ public final class clusterServiceGrpc {
                 com.cmpe275.generated.FileQuery,
                 com.cmpe275.generated.FileResponse>(
                   this, METHODID_IS_FILE_PRESENT)))
+          .addMethod(
+            METHOD_INITIATE_FILE_UPLOAD,
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.cmpe275.generated.FileUploadRequest,
+                com.cmpe275.generated.FileResponse>(
+                  this, METHODID_INITIATE_FILE_UPLOAD)))
+          .addMethod(
+            METHOD_UPLOAD_FILE_CHUNK,
+            asyncClientStreamingCall(
+              new MethodHandlers<
+                com.cmpe275.generated.Chunk,
+                com.cmpe275.generated.ChunkAck>(
+                  this, METHODID_UPLOAD_FILE_CHUNK)))
           .build();
     }
   }
@@ -205,6 +268,31 @@ public final class clusterServiceGrpc {
       asyncUnaryCall(
           getChannel().newCall(METHOD_IS_FILE_PRESENT, getCallOptions()), request, responseObserver);
     }
+
+    /**
+     * <pre>
+     * ADDITIONAL INFO:
+     * this is the new file upload rpc
+     * implementing this one instead of the one in the file_transfer.proto file
+     * </pre>
+     */
+    public void initiateFileUpload(com.cmpe275.generated.FileUploadRequest request,
+        io.grpc.stub.StreamObserver<com.cmpe275.generated.FileResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(METHOD_INITIATE_FILE_UPLOAD, getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     * <pre>
+     * this is the new file chunk upload rpc
+     * implement this one instead of the one in the file_transfer.proto file
+     * </pre>
+     */
+    public io.grpc.stub.StreamObserver<com.cmpe275.generated.Chunk> uploadFileChunk(
+        io.grpc.stub.StreamObserver<com.cmpe275.generated.ChunkAck> responseObserver) {
+      return asyncClientStreamingCall(
+          getChannel().newCall(METHOD_UPLOAD_FILE_CHUNK, getCallOptions()), responseObserver);
+    }
   }
 
   /**
@@ -255,6 +343,18 @@ public final class clusterServiceGrpc {
     public com.cmpe275.generated.FileResponse isFilePresent(com.cmpe275.generated.FileQuery request) {
       return blockingUnaryCall(
           getChannel(), METHOD_IS_FILE_PRESENT, getCallOptions(), request);
+    }
+
+    /**
+     * <pre>
+     * ADDITIONAL INFO:
+     * this is the new file upload rpc
+     * implementing this one instead of the one in the file_transfer.proto file
+     * </pre>
+     */
+    public com.cmpe275.generated.FileResponse initiateFileUpload(com.cmpe275.generated.FileUploadRequest request) {
+      return blockingUnaryCall(
+          getChannel(), METHOD_INITIATE_FILE_UPLOAD, getCallOptions(), request);
     }
   }
 
@@ -310,11 +410,26 @@ public final class clusterServiceGrpc {
       return futureUnaryCall(
           getChannel().newCall(METHOD_IS_FILE_PRESENT, getCallOptions()), request);
     }
+
+    /**
+     * <pre>
+     * ADDITIONAL INFO:
+     * this is the new file upload rpc
+     * implementing this one instead of the one in the file_transfer.proto file
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.cmpe275.generated.FileResponse> initiateFileUpload(
+        com.cmpe275.generated.FileUploadRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(METHOD_INITIATE_FILE_UPLOAD, getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_LIVELINESS = 0;
   private static final int METHODID_UPDATE_CHUNK_DATA = 1;
   private static final int METHODID_IS_FILE_PRESENT = 2;
+  private static final int METHODID_INITIATE_FILE_UPLOAD = 3;
+  private static final int METHODID_UPLOAD_FILE_CHUNK = 4;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -345,6 +460,10 @@ public final class clusterServiceGrpc {
           serviceImpl.isFilePresent((com.cmpe275.generated.FileQuery) request,
               (io.grpc.stub.StreamObserver<com.cmpe275.generated.FileResponse>) responseObserver);
           break;
+        case METHODID_INITIATE_FILE_UPLOAD:
+          serviceImpl.initiateFileUpload((com.cmpe275.generated.FileUploadRequest) request,
+              (io.grpc.stub.StreamObserver<com.cmpe275.generated.FileResponse>) responseObserver);
+          break;
         default:
           throw new AssertionError();
       }
@@ -355,6 +474,9 @@ public final class clusterServiceGrpc {
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
+        case METHODID_UPLOAD_FILE_CHUNK:
+          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.uploadFileChunk(
+              (io.grpc.stub.StreamObserver<com.cmpe275.generated.ChunkAck>) responseObserver);
         default:
           throw new AssertionError();
       }
@@ -409,6 +531,8 @@ public final class clusterServiceGrpc {
               .addMethod(METHOD_LIVELINESS)
               .addMethod(METHOD_UPDATE_CHUNK_DATA)
               .addMethod(METHOD_IS_FILE_PRESENT)
+              .addMethod(METHOD_INITIATE_FILE_UPLOAD)
+              .addMethod(METHOD_UPLOAD_FILE_CHUNK)
               .build();
         }
       }

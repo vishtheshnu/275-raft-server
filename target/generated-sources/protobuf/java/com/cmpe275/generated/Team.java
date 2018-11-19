@@ -30,6 +30,11 @@ public final class Team {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_grpc_Chunk_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_grpc_ChunkAck_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_grpc_ChunkAck_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_grpc_ChunkDataResponse_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -44,6 +49,11 @@ public final class Team {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_grpc_FileResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_grpc_FileUploadRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_grpc_FileUploadRequest_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -60,16 +70,24 @@ public final class Team {
       "\n\013isAvailable\030\006 \001(\010\"k\n\005Chunk\022\020\n\010fileName" +
       "\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\003\022\021\n\tmaxChunks\030\003 \001" +
       "(\003\022\016\n\006seqNum\030\004 \001(\003\022\016\n\006seqMax\030\005 \001(\003\022\014\n\004da" +
-      "ta\030\006 \001(\014\"K\n\021ChunkDataResponse\022\020\n\010fileNam" +
-      "e\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\003\022\023\n\013isAvailable\030" +
-      "\003 \001(\010\"\035\n\tFileQuery\022\020\n\010fileName\030\001 \001(\t\"@\n\014",
-      "FileResponse\022\017\n\007isFound\030\001 \001(\010\022\037\n\006chunks\030" +
-      "\002 \003(\0132\017.grpc.ChunkData2\263\001\n\016clusterServic" +
-      "e\022.\n\nLiveliness\022\017.grpc.Heartbeat\032\017.grpc." +
-      "Heartbeat\022;\n\017updateChunkData\022\017.grpc.Chun" +
-      "kData\032\027.grpc.ChunkDataResponse\0224\n\risFile" +
-      "Present\022\017.grpc.FileQuery\032\022.grpc.FileResp" +
-      "onseB\031\n\025com.cmpe275.generatedP\001b\006proto3"
+      "ta\030\006 \001(\014\";\n\010ChunkAck\022\020\n\010fileName\030\001 \001(\t\022\017" +
+      "\n\007chunkId\030\002 \001(\003\022\014\n\004done\030\004 \001(\010\"K\n\021ChunkDa" +
+      "taResponse\022\020\n\010fileName\030\001 \001(\t\022\017\n\007chunkId\030",
+      "\002 \001(\003\022\023\n\013isAvailable\030\003 \001(\010\"\035\n\tFileQuery\022" +
+      "\020\n\010fileName\030\001 \001(\t\"S\n\014FileResponse\022\017\n\007isF" +
+      "ound\030\001 \001(\010\022\037\n\006chunks\030\002 \003(\0132\017.grpc.ChunkD" +
+      "ata\022\021\n\trequestId\030\004 \001(\003\"Y\n\021FileUploadRequ" +
+      "est\022\020\n\010fileName\030\001 \001(\t\022\014\n\004size\030\002 \001(\003\022\021\n\tm" +
+      "axChunks\030\003 \001(\003\022\021\n\trequestId\030\004 \001(\0032\250\002\n\016cl" +
+      "usterService\022.\n\nLiveliness\022\017.grpc.Heartb" +
+      "eat\032\017.grpc.Heartbeat\022;\n\017updateChunkData\022" +
+      "\017.grpc.ChunkData\032\027.grpc.ChunkDataRespons" +
+      "e\0224\n\risFilePresent\022\017.grpc.FileQuery\032\022.gr",
+      "pc.FileResponse\022A\n\022initiateFileUpload\022\027." +
+      "grpc.FileUploadRequest\032\022.grpc.FileRespon" +
+      "se\0220\n\017uploadFileChunk\022\013.grpc.Chunk\032\016.grp" +
+      "c.ChunkAck(\001B\031\n\025com.cmpe275.generatedP\001b" +
+      "\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -101,24 +119,36 @@ public final class Team {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_grpc_Chunk_descriptor,
         new java.lang.String[] { "FileName", "ChunkId", "MaxChunks", "SeqNum", "SeqMax", "Data", });
-    internal_static_grpc_ChunkDataResponse_descriptor =
+    internal_static_grpc_ChunkAck_descriptor =
       getDescriptor().getMessageTypes().get(3);
+    internal_static_grpc_ChunkAck_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_grpc_ChunkAck_descriptor,
+        new java.lang.String[] { "FileName", "ChunkId", "Done", });
+    internal_static_grpc_ChunkDataResponse_descriptor =
+      getDescriptor().getMessageTypes().get(4);
     internal_static_grpc_ChunkDataResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_grpc_ChunkDataResponse_descriptor,
         new java.lang.String[] { "FileName", "ChunkId", "IsAvailable", });
     internal_static_grpc_FileQuery_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_grpc_FileQuery_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_grpc_FileQuery_descriptor,
         new java.lang.String[] { "FileName", });
     internal_static_grpc_FileResponse_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_grpc_FileResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_grpc_FileResponse_descriptor,
-        new java.lang.String[] { "IsFound", "Chunks", });
+        new java.lang.String[] { "IsFound", "Chunks", "RequestId", });
+    internal_static_grpc_FileUploadRequest_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_grpc_FileUploadRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_grpc_FileUploadRequest_descriptor,
+        new java.lang.String[] { "FileName", "Size", "MaxChunks", "RequestId", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

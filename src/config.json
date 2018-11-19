@@ -6,5 +6,9 @@
   ],
 
   "proxyAddresses": [
-  ]
+  ],
+
+  "coordinationServer": {
+    "grpcPort": 8080
+  }
 }

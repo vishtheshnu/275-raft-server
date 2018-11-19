@@ -14,6 +14,8 @@ public class Config {
 	public static List<Address> raftAddresses;
 	public static List<Address> proxyAddresses;
 
+	public static int coordServerPort;
+
 	public Config(){
 		Scanner scan = null;
 		try {
@@ -45,6 +47,9 @@ public class Config {
 			proxyAddresses.add(new Address(obj.getString("host"),
 					obj.getInt("port")));
 		}
+
+		//Load Coordination Server Info
+		coordServerPort = config.getJSONObject("coordinationServer").getInt("grpcPort");
 	}
 
 

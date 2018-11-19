@@ -35,4 +35,9 @@ public interface FileResponseOrBuilder extends
    */
   com.cmpe275.generated.ChunkDataOrBuilder getChunksOrBuilder(
       int index);
+
+  /**
+   * <code>int64 requestId = 4;</code>
+   */
+  long getRequestId();
 }

@@ -18,6 +18,7 @@ private static final long serialVersionUID = 0L;
   private FileResponse() {
     isFound_ = false;
     chunks_ = java.util.Collections.emptyList();
+    requestId_ = 0L;
   }
 
   @java.lang.Override
@@ -60,6 +61,11 @@ private static final long serialVersionUID = 0L;
             }
             chunks_.add(
                 input.readMessage(com.cmpe275.generated.ChunkData.parser(), extensionRegistry));
+            break;
+          }
+          case 32: {
+
+            requestId_ = input.readInt64();
             break;
           }
         }
@@ -134,6 +140,15 @@ private static final long serialVersionUID = 0L;
     return chunks_.get(index);
   }
 
+  public static final int REQUESTID_FIELD_NUMBER = 4;
+  private long requestId_;
+  /**
+   * <code>int64 requestId = 4;</code>
+   */
+  public long getRequestId() {
+    return requestId_;
+  }
+
   private byte memoizedIsInitialized = -1;
   public final boolean isInitialized() {
     byte isInitialized = memoizedIsInitialized;
@@ -152,6 +167,9 @@ private static final long serialVersionUID = 0L;
     for (int i = 0; i < chunks_.size(); i++) {
       output.writeMessage(2, chunks_.get(i));
     }
+    if (requestId_ != 0L) {
+      output.writeInt64(4, requestId_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -167,6 +185,10 @@ private static final long serialVersionUID = 0L;
     for (int i = 0; i < chunks_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(2, chunks_.get(i));
+    }
+    if (requestId_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(4, requestId_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -188,6 +210,8 @@ private static final long serialVersionUID = 0L;
         == other.getIsFound());
     result = result && getChunksList()
         .equals(other.getChunksList());
+    result = result && (getRequestId()
+        == other.getRequestId());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -206,6 +230,9 @@ private static final long serialVersionUID = 0L;
       hash = (37 * hash) + CHUNKS_FIELD_NUMBER;
       hash = (53 * hash) + getChunksList().hashCode();
     }
+    hash = (37 * hash) + REQUESTID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getRequestId());
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -344,6 +371,8 @@ private static final long serialVersionUID = 0L;
       } else {
         chunksBuilder_.clear();
       }
+      requestId_ = 0L;
+
       return this;
     }
 
@@ -378,6 +407,7 @@ private static final long serialVersionUID = 0L;
       } else {
         result.chunks_ = chunksBuilder_.build();
       }
+      result.requestId_ = requestId_;
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -448,6 +478,9 @@ private static final long serialVersionUID = 0L;
             chunksBuilder_.addAllMessages(other.chunks_);
           }
         }
+      }
+      if (other.getRequestId() != 0L) {
+        setRequestId(other.getRequestId());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -741,6 +774,32 @@ private static final long serialVersionUID = 0L;
         chunks_ = null;
       }
       return chunksBuilder_;
+    }
+
+    private long requestId_ ;
+    /**
+     * <code>int64 requestId = 4;</code>
+     */
+    public long getRequestId() {
+      return requestId_;
+    }
+    /**
+     * <code>int64 requestId = 4;</code>
+     */
+    public Builder setRequestId(long value) {
+      
+      requestId_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int64 requestId = 4;</code>
+     */
+    public Builder clearRequestId() {
+      
+      requestId_ = 0L;
+      onChanged();
+      return this;
     }
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {
