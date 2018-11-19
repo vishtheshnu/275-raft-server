@@ -1,4 +1,4 @@
-package grpc;
+package coordination;
 
 import io.atomix.AtomixClient;
 import io.grpc.Server;

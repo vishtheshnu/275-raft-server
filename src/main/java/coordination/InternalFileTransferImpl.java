@@ -1,4 +1,4 @@
-package grpc;
+package coordination;
 
 import com.cmpe275.generated.*;
 import io.atomix.AtomixClient;

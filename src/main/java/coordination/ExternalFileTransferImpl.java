@@ -1,5 +1,7 @@
-package grpc;
+package coordination;
 
+import grpc.DataTransferServiceGrpc;
+import grpc.FileTransfer;
 import io.atomix.AtomixClient;
 import io.grpc.stub.StreamObserver;
 

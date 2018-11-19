@@ -1,11 +1,11 @@
-package raft;
+package coordination;
 
-import grpc.GrpcServer;
 import io.atomix.AtomixClient;
 import io.atomix.catalyst.transport.Address;
 import io.atomix.catalyst.transport.netty.NettyTransport;
+import raft.Config;
+import raft.TestStoreObj;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class CoordinationServer {
@@ -26,6 +26,7 @@ public class CoordinationServer {
 
 		//Initialize gRPC server
 		grpcServer = new GrpcServer(client);
+		grpcServer.startServer();
 
 
 	}
