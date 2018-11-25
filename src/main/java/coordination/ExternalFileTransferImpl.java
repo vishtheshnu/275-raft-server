@@ -139,6 +139,8 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 				.addAllLstProxy(null)
 				.build();
 
+		responseObserver.onNext(response);
+		responseObserver.onCompleted();
 		Timestamp ts2  =  new Timestamp(System.currentTimeMillis());
 		logger.debug("Method GetFileLocation ended at "+ ts2);
 		logger.debug("Method GetFileLocation execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
@@ -160,13 +162,22 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 				.thenApply(a -> a.iterator())
 				.get();
 		List<String> list = new ArrayList<String>();
+
+		FileTransfer.FileList.Builder responseBuilder = grpc.FileTransfer.FileList.newBuilder();
+		int count =0;
 		while(it.hasNext()){
+
 			Map.Entry<Object, Object> entry  = it.next();
 			String[] value = ((String)entry.getValue()).split(",");
+			responseBuilder.setLstFileNames(count, value[1]);
+			count++;
 			list.add(value[1]);
 		}
 
-		//TODO how to create a builder
+
+		FileTransfer.FileList response = responseBuilder.build();
+		responseObserver.onNext(response);
+		responseObserver.onCompleted();
 		Timestamp ts2  =  new Timestamp(System.currentTimeMillis());
 		logger.debug("Method ListFiles ended at "+ ts2);
 		logger.debug("Method ListFiles execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
