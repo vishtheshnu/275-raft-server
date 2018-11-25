@@ -1,4 +1,35 @@
-D:\Class Files\cmpe 275\atomixExample\src\main\java\ClusterCreator.java
-D:\Class Files\cmpe 275\atomixExample\src\main\java\grpc\FileTransferImpl.java
-D:\Class Files\cmpe 275\atomixExample\src\main\java\raft\SingleCluster.java
-D:\Class Files\cmpe 275\atomixExample\src\main\java\raft\ClusterClient.java
+/home/testy/275/275-raft-server/src/main/java/proxy/DataTransferServiceImpl.java
+/home/testy/275/275-raft-server/src/main/java/raft/TestStoreObj.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/ChunkAckOrBuilder.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/FileUploadRequest.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/HeartbeatOrBuilder.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/ChunkDataResponseOrBuilder.java
+/home/testy/275/275-raft-server/src/main/java/raft/SingleCluster.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/FileUploadRequestOrBuilder.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/ChunkDataResponse.java
+/home/testy/275/275-raft-server/src/main/java/proxy/ProxyServer.java
+/home/testy/275/275-raft-server/src/main/java/proxy/ClusterServiceImpl.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/Chunk.java
+/home/testy/275/275-raft-server/src/main/java/coordination/CoordinationServer.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/ChunkDataOrBuilder.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/grpc-java/com/cmpe275/generated/clusterServiceGrpc.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/FileResponseOrBuilder.java
+/home/testy/275/275-raft-server/src/main/java/coordination/InternalFileTransferImpl.java
+/home/testy/275/275-raft-server/src/main/java/proxy/testClient.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/grpc-java/grpc/DataTransferServiceGrpc.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/ChunkAck.java
+/home/testy/275/275-raft-server/src/main/java/coordination/HeartbeatService.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/grpc/FileTransfer.java
+/home/testy/275/275-raft-server/src/main/java/util/Connection.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/FileResponse.java
+/home/testy/275/275-raft-server/src/main/java/ClusterCreator.java
+/home/testy/275/275-raft-server/src/main/java/raft/Config.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/Team.java
+/home/testy/275/275-raft-server/src/main/java/proxy/ProxyRpcServer.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/FileQueryOrBuilder.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/FileQuery.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/ChunkOrBuilder.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/ChunkData.java
+/home/testy/275/275-raft-server/src/main/java/coordination/GrpcServer.java
+/home/testy/275/275-raft-server/src/main/java/coordination/ExternalFileTransferImpl.java
+/home/testy/275/275-raft-server/target/generated-sources/protobuf/java/com/cmpe275/generated/Heartbeat.java

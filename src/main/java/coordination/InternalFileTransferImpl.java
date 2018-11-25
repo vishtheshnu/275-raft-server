@@ -4,8 +4,11 @@ import com.cmpe275.generated.*;
 import io.atomix.AtomixClient;
 import io.atomix.catalyst.transport.Address;
 import io.grpc.stub.StreamObserver;
+import org.apache.log4j.Logger;
 import raft.Config;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -13,6 +16,8 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 
 	private AtomixClient raftClient;
 	private HeartbeatService heartbeat;
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+	Logger logger = Logger.getLogger(InternalFileTransferImpl.class);
 
 	public InternalFileTransferImpl(AtomixClient client, HeartbeatService hbService){
 		super();
@@ -20,12 +25,20 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 		heartbeat = hbService;
 	}
 
-	//Liveliness (This file sends the message to proxies)
+	@Override
+	public void liveliness(Heartbeat request, StreamObserver<Heartbeat> responseObserver) {
+		Timestamp ts1  =  new Timestamp(System.currentTimeMillis());
+		logger.debug("Method liveliness started at "+ ts1);
+		super.liveliness(request, responseObserver);
+	}
+//Liveliness (This file sends the message to proxies)
 
 	//updateChunkData (From edge to This Coordination server)
 	@Override
 	public void updateChunkData(ChunkData request, StreamObserver<ChunkDataResponse> responseObserver){
 
+		Timestamp ts1  =  new Timestamp(System.currentTimeMillis());
+		logger.debug("Method updateChunkData started at "+ ts1);
 		String mapvalue = null;
 		try {
 			mapvalue = raftClient.getMap("fileLocations")
@@ -50,6 +63,9 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 		responseObserver.onNext(response);
 
 		responseObserver.onCompleted();
+		Timestamp ts2  =  new Timestamp(System.currentTimeMillis());
+		logger.debug("Method updateChunkData ended at "+ ts2);
+		logger.debug("Method updateChunkData execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
 
 	}
 
@@ -57,6 +73,9 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 	@Override
 	public void isFilePresent(FileQuery request, StreamObserver<FileResponse> responseObserver){
 
+
+		Timestamp ts1  =  new Timestamp(System.currentTimeMillis());
+		logger.debug("Method isFilePresent started at "+ ts1);
 		String mapvalue = null;
 		try {
 			mapvalue = raftClient.getMap("fileLocations").thenCompose(m -> m.get(request.getFileName()+"_0"))
@@ -87,7 +106,9 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
-
+		Timestamp ts2  =  new Timestamp(System.currentTimeMillis());
+		logger.debug("Method isFilePresent ended at "+ ts2);
+		logger.debug("Method isFilePresent execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
 	}
 
 	//uploadFileChunk (From client to proxy; not needed here!)
@@ -96,7 +117,9 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 	@Override
 	  public void initiateFileUpload(com.cmpe275.generated.FileUploadRequest request,
 	        io.grpc.stub.StreamObserver<com.cmpe275.generated.FileResponse> responseObserver) {
-			
+
+		Timestamp ts1  =  new Timestamp(System.currentTimeMillis());
+		logger.debug("Method initiateFileUpload started at "+ ts1);
 			System.out.println("initiateFileUpload Method arrived");
 	          ArrayList<ChunkData> chunks = new ArrayList<ChunkData>();
 	          ArrayList<String> proxies = new ArrayList<String>();
@@ -218,6 +241,9 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 	          responseObserver.onNext(response);
 	          
 	        responseObserver.onCompleted();
+		Timestamp ts2  =  new Timestamp(System.currentTimeMillis());
+		logger.debug("Method initiateFileUpload ended at "+ ts2);
+		logger.debug("Method initiateFileUpload execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
 
 	    }
 

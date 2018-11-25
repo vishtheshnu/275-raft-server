@@ -5,7 +5,10 @@ import grpc.FileTransfer;
 import io.atomix.AtomixClient;
 import io.atomix.collections.DistributedMap;
 import io.grpc.stub.StreamObserver;
+import org.apache.log4j.Logger;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +19,8 @@ import java.util.concurrent.ExecutionException;
 public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransferServiceImplBase {
 
 	private AtomixClient raftClient;
-
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+	Logger logger = Logger.getLogger(ExternalFileTransferImpl.class);
 	public ExternalFileTransferImpl(AtomixClient client){
 		super();
 		raftClient = client;
@@ -26,6 +30,9 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 	@Override
     public void requestFileInfo(grpc.FileTransfer.FileInfo request,
         io.grpc.stub.StreamObserver<grpc.FileTransfer.FileLocationInfo> responseObserver) {
+
+		Timestamp ts1  =  new Timestamp(System.currentTimeMillis());
+		logger.debug("Method requestFileInfo started at "+ ts1);
 
       String fileName = request.getFileName();
       int maxChunks = 0;
@@ -107,14 +114,19 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 		}
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+		Timestamp ts2  =  new Timestamp(System.currentTimeMillis());
+		logger.debug("Method requestFileInfo ended at "+ ts2);
+		logger.debug("Method requestFileInfo execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
     }
 
 
 
-    @Override
+
 	public void GetFileLocation(FileTransfer.FileInfo request,
 								StreamObserver<FileTransfer.FileLocationInfo> responseObserver){
 
+		Timestamp ts1  =  new Timestamp(System.currentTimeMillis());
+		logger.debug("Method GetFileLocation started at "+ ts1);
 		String fileName = request.getFileName();
 
 		FileTransfer.FileLocationInfo response = FileTransfer.FileLocationInfo.newBuilder()
@@ -130,7 +142,6 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 	//UploadFile (Not supported yet/between external client and proxy server)
 
 	//ListFiles (between any client and This coordination server)
-	@Override
 	public void ListFiles(FileTransfer.RequestFileList request, StreamObserver<FileTransfer.FileList> responseObserver) throws ExecutionException, InterruptedException {
 		CompletableFuture<DistributedMap<Object, Object>> map = raftClient.getMap("fileLocations");
 		Iterator<Map.Entry<Object, Object>> it = raftClient.getMap("fileLocations")
@@ -145,6 +156,9 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 		}
 
 		//TODO how to create a builder
+		Timestamp ts2  =  new Timestamp(System.currentTimeMillis());
+		logger.debug("Method GetFileLocation ended at "+ ts2);
+		logger.debug("Method GetFileLocation execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
 
 	}
 

@@ -4,6 +4,9 @@ import com.cmpe275.generated.*;
 import io.atomix.catalyst.transport.Address;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import proxy.ProxyServer;
 import raft.Config;
 
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ public class HeartbeatService {
 	private ArrayList<clusterServiceGrpc.clusterServiceFutureStub> stubs;
 	private Heartbeat request;
 	private boolean [] isProxyAccessible;
+	protected static Logger LOG = LoggerFactory.getLogger(HeartbeatService.class.getName());
 
 	public HeartbeatService(){
 		proxyChannels = new ArrayList<ManagedChannel>();
@@ -55,11 +59,13 @@ public class HeartbeatService {
 	}
 
 	public void startHeartbeatService(){
+		LOG.debug("Starting the Hearbeat service between Proxy and Co-ordination server...");
 		//Create a new heartbeat thread for each channel/stub
 		for(int i = 0; i < stubs.size(); i++){
 			createHBThread(stubs.get(i), i);
 		}
 		//stub.isFilePresent(null).get()
+		LOG.debug("Started the Hearbeat service between Proxy and Co-ordination server...");
 	}
 
 	private void createHBThread(clusterServiceGrpc.clusterServiceFutureStub stub, int index){

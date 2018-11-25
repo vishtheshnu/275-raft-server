@@ -3,6 +3,9 @@ package coordination;
 import io.atomix.AtomixClient;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import proxy.ProxyServer;
 import raft.Config;
 
 import java.io.IOException;
@@ -12,6 +15,7 @@ import java.io.IOException;
  */
 public class GrpcServer{
 
+	protected static Logger LOG = LoggerFactory.getLogger(GrpcServer.class.getName());
 	private Server server;
 	private AtomixClient raftClient;
 
@@ -24,6 +28,7 @@ public class GrpcServer{
 	}
 
 	public void startServer(){
+		LOG.debug("Starting GRPC Server...");
 		try {
 			server.start();
 			server.awaitTermination();
@@ -36,5 +41,6 @@ public class GrpcServer{
 			e.printStackTrace();
 			System.exit(1);
 		}
+		LOG.debug("GRPC Server started...");
 	}
 }

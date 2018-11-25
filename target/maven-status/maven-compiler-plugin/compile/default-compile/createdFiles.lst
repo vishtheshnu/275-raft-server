@@ -3,6 +3,7 @@ grpc/FileTransfer$RequestFileList$Builder.class
 grpc/FileTransfer$RequestFileList$1.class
 ClusterCreator$2.class
 com/cmpe275/generated/ChunkDataResponse$1.class
+proxy/testClient.class
 ClusterCreator.class
 com/cmpe275/generated/ChunkDataOrBuilder.class
 grpc/FileTransfer$FileList.class
@@ -14,6 +15,7 @@ grpc/DataTransferServiceGrpc$DataTransferServiceFutureStub.class
 grpc/FileTransfer$ProxyListOrBuilder.class
 com/cmpe275/generated/clusterServiceGrpc$clusterServiceMethodDescriptorSupplier.class
 com/cmpe275/generated/Team$1.class
+proxy/DataTransferServiceImpl.class
 grpc/FileTransfer$FileMetaDataOrBuilder.class
 grpc/DataTransferServiceGrpc$DataTransferServiceBaseDescriptorSupplier.class
 com/cmpe275/generated/ChunkDataResponse$Builder.class
@@ -21,6 +23,7 @@ com/cmpe275/generated/FileQuery$1.class
 com/cmpe275/generated/FileResponse.class
 com/cmpe275/generated/FileResponseOrBuilder.class
 grpc/FileTransfer$FileUploadData.class
+proxy/ClusterServiceImpl$1.class
 com/cmpe275/generated/Heartbeat$Builder.class
 grpc/FileTransfer$FileInfo$1.class
 grpc/FileTransfer$RequestFileListOrBuilder.class
@@ -42,6 +45,7 @@ grpc/FileTransfer$ProxyList$Builder.class
 com/cmpe275/generated/Chunk.class
 com/cmpe275/generated/Chunk$Builder.class
 com/cmpe275/generated/HeartbeatOrBuilder.class
+proxy/ProxyServer.class
 raft/SingleCluster$1.class
 com/cmpe275/generated/FileUploadRequest.class
 grpc/FileTransfer$ProxyList$1.class
@@ -53,6 +57,7 @@ com/cmpe275/generated/ChunkAck.class
 com/cmpe275/generated/clusterServiceGrpc.class
 grpc/DataTransferServiceGrpc.class
 com/cmpe275/generated/Heartbeat.class
+proxy/ClusterServiceImpl.class
 grpc/DataTransferServiceGrpc$1.class
 grpc/FileTransfer$FileUploadInfoOrBuilder.class
 grpc/FileTransfer$FileLocationInfo$1.class
@@ -60,6 +65,7 @@ com/cmpe275/generated/ChunkDataResponse.class
 com/cmpe275/generated/ChunkData.class
 grpc/FileTransfer$FileUploadInfo$Builder.class
 com/cmpe275/generated/ChunkAck$1.class
+util/Connection.class
 com/cmpe275/generated/FileQueryOrBuilder.class
 grpc/DataTransferServiceGrpc$DataTransferServiceBlockingStub.class
 com/cmpe275/generated/FileUploadRequest$Builder.class
@@ -74,6 +80,7 @@ grpc/DataTransferServiceGrpc$DataTransferServiceFileDescriptorSupplier.class
 grpc/FileTransfer$FileLocationInfo.class
 grpc/FileTransfer$FileInfoOrBuilder.class
 grpc/FileTransfer$ChunkInfoOrBuilder.class
+proxy/ProxyRpcServer.class
 com/cmpe275/generated/FileUploadRequestOrBuilder.class
 grpc/FileTransfer$ChunkInfo$1.class
 coordination/CoordinationServer.class
@@ -84,6 +91,7 @@ grpc/DataTransferServiceGrpc$DataTransferServiceStub.class
 grpc/FileTransfer$FileInfo$Builder.class
 com/cmpe275/generated/FileUploadRequest$1.class
 coordination/ExternalFileTransferImpl.class
+proxy/DataTransferServiceImpl$1.class
 coordination/InternalFileTransferImpl.class
 com/cmpe275/generated/ChunkData$1.class
 com/cmpe275/generated/clusterServiceGrpc$clusterServiceBlockingStub.class
