@@ -74,7 +74,7 @@ public class ProxyServer {
         if (hostPort <= 1024)
             throw new RuntimeException("server port must be above 1024");
 		
-//		dbServerList = initDbServerList(conf);
+		dbServerList = initDbServerList(conf);
         LOG.debug("Proxy server started..");
 	}
 	
