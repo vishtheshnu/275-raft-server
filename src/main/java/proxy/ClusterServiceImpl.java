@@ -28,11 +28,12 @@ public class ClusterServiceImpl extends clusterServiceGrpc.clusterServiceImplBas
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
 	Logger logger = Logger.getLogger(ClusterServiceImpl.class);
 
-	logger.
+
 	@Override
 	public void liveliness(com.cmpe275.generated.Heartbeat request,
 	        io.grpc.stub.StreamObserver<com.cmpe275.generated.Heartbeat> responseObserver) {
-	      //TODO
+
+
 	    }
 	
 	@Override
@@ -45,7 +46,7 @@ public class ClusterServiceImpl extends clusterServiceGrpc.clusterServiceImplBas
 
 
 			  String fileName;
-	  		long chunkId;
+	  		 long chunkId;
 	  		
 	    	  	@Override
 	    	  	 public void onNext(Chunk ch){

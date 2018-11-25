@@ -88,6 +88,8 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
 			 }
 		 }
 		 responseObserver.onCompleted();
+	Timestamp ts2  =  new Timestamp(System.currentTimeMillis());
+	logger.debug("Method requestFileInfo ended at "+ ts2);
 	logger.debug("Method downloadChunk ended at "+ ts2);
 	logger.debug("Method downloadChunk execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
 	}
@@ -144,8 +146,9 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
 	                        .setFileName(fileName)
 	                        .build());
 	                    responseObserver.onCompleted();
-						logger.debug("Method downloadChunk ended at "+ ts2);
-						logger.debug("Method downloadChunk execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
+						Timestamp ts2  =  new Timestamp(System.currentTimeMillis());
+						logger.debug("Method uploadFile ended at "+ ts2);
+						logger.debug("Method uploadFile execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
 	                }
 	               };
 	            }
