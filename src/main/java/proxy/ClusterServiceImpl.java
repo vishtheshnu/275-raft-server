@@ -25,6 +25,13 @@ import java.util.Base64;
 
 
 public class ClusterServiceImpl extends clusterServiceGrpc.clusterServiceImplBase {
+	
+	private ProxyServer proxyServer;
+	
+	ClusterServiceImpl(ProxyServer proxyServer){
+        super();
+        this.proxyServer = proxyServer;
+    }
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
 	Logger logger = Logger.getLogger(ClusterServiceImpl.class);

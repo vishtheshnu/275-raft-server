@@ -27,23 +27,23 @@ import util.Connection;
 public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTransferServiceImplBase {
 	private ProxyServer proxyServer;
 	
-	private static List<ManagedChannel> dbChannels = new ArrayList<ManagedChannel>();
+//	private static List<ManagedChannel> dbChannels = new ArrayList<ManagedChannel>();
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
 	Logger logger = Logger.getLogger(DataTransferServiceImpl.class);
 	
 	DataTransferServiceImpl(ProxyServer proxyServer){
         super();
         this.proxyServer = proxyServer;
-        initConnections();
+//        initConnections();
     }
 	
-	public static void initConnections(){
-        for(Connection c : ProxyServer.dbServerList){
-            ManagedChannel ch = ManagedChannelBuilder.forAddress(c.ipAddress, c.port)
-            		.usePlaintext(true).build();
-            dbChannels.add(ch);
-        }
-	}
+//	public static void initConnections(){
+//        for(Connection c : ProxyServer.dbServerList){
+//            ManagedChannel ch = ManagedChannelBuilder.forAddress(c.ipAddress, c.port)
+//            		.usePlaintext(true).build();
+//            dbChannels.add(ch);
+//        }
+//	}
         
    
 //DownloadChunk (between external client and proxy server)

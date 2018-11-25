@@ -9,15 +9,18 @@ import java.io.IOException;
 
 public class ProxyRpcServer {
 	private DataTransferServiceImpl dataTransferService;
+	private ClusterServiceImpl clusterService;
 	private ProxyServer proxyServer;
 	private Connection CoordSvr; //TODO Check this
 	private Server server;
 	
 	ProxyRpcServer(String svrConf){
-		proxyServer = new ProxyServer(svrConf, CoordSvr).getInstance(svrConf);
+		proxyServer = new ProxyServer(svrConf).getInstance(svrConf);
         dataTransferService = new DataTransferServiceImpl(this.proxyServer);
+        clusterService = new ClusterServiceImpl(this.proxyServer);
         server = ServerBuilder.forPort(proxyServer.getServerPort())
                 .addService(dataTransferService)
+                .addService(clusterService)
                 .build();
     }
 	

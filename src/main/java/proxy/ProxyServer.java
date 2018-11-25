@@ -15,7 +15,6 @@ public class ProxyServer {
 	protected static Logger LOG = LoggerFactory.getLogger(ProxyServer.class.getName());
     protected static AtomicReference<ProxyServer> instance = new AtomicReference<ProxyServer>();
     protected static Config conf;
-    private static Connection CoordSvr;
     public static String serverConfigString;
     public static List<Connection> dbServerList;
 
@@ -24,16 +23,16 @@ public class ProxyServer {
     protected static Long hostID;
     protected static String hostIP;
     
-    public ProxyServer(String configArg, Connection CoordSvr){
-    		ProxyServer.CoordSvr = CoordSvr;
+    public ProxyServer(String configArg){
     		ProxyServer.conf = ConfigFactory.load();
         ProxyServer.serverConfigString = configArg;
     }
     
     public static ProxyServer getInstance(String conf){
-        instance.compareAndSet(null, new ProxyServer(conf, CoordSvr ));
+        instance.compareAndSet(null, new ProxyServer(conf));
         return instance.get();
     }
+    
     
     private List<Connection> initDbServerList(Config conf){
         LOG.debug("Initialising Mongo Instances...");
@@ -62,18 +61,12 @@ public class ProxyServer {
             throw new RuntimeException("server not configured!");
         }
 
-        String tmp_ip = conf.getString(this.serverConfigString+".serverConig.hostIP");
+        String tmp_ip =  conf.getString(this.serverConfigString+".proxyConfig.svrIP");
         if (tmp_ip == null)
             throw new RuntimeException("missing server ID");
         hostIP = tmp_ip;
 
-
-        Long tmp_id = conf.getLong(this.serverConfigString+".serverConfig.hostID");
-        if (tmp_id == null)
-            throw new RuntimeException("missing server ID");
-        hostID = tmp_id;
-
-        Integer tmp_port = conf.getInt(this.serverConfigString+".serverConfig.hostPort");
+        Integer tmp_port = conf.getInt(this.serverConfigString+".proxyConfig.svrPort");
         if (tmp_port == null)
             throw new RuntimeException("missing server port");
         hostPort = tmp_port;
@@ -81,7 +74,7 @@ public class ProxyServer {
         if (hostPort <= 1024)
             throw new RuntimeException("server port must be above 1024");
 		
-		dbServerList = initDbServerList(conf);
+//		dbServerList = initDbServerList(conf);
         LOG.debug("Proxy server started..");
 	}
 	

@@ -175,6 +175,7 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 
 	//RequestFileUpload (though uploading is not supported, just return a list of all proxies)
 	public void RequestFileUpload(FileTransfer.FileUploadInfo request, StreamObserver<FileTransfer.ProxyList> responseObserver){
+
 		boolean [] onlineProxies = heartbeatService.getProxyStatus();
 
 		ArrayList<FileTransfer.ProxyInfo> proxyList = new ArrayList<FileTransfer.ProxyInfo>();
@@ -193,5 +194,6 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 				.build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
+
 	}
 }
