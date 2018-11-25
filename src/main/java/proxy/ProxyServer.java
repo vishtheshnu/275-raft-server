@@ -36,6 +36,7 @@ public class ProxyServer {
     }
     
     private List<Connection> initDbServerList(Config conf){
+        LOG.debug("Initialising Mongo Instances...");
         List<Connection> db_svr_list = new ArrayList<Connection>();
 
         Connection svr_1 = new Connection(
@@ -51,10 +52,12 @@ public class ProxyServer {
         db_svr_list.add(svr_1);
         db_svr_list.add(svr_2);
         db_svr_list.add(svr_3);
+        LOG.debug("Mongo Instances Initialised...");
         return db_svr_list;
     }
     
 	private void init() {
+        LOG.debug("Starting Proxy server..");
 		if (conf == null) {
             throw new RuntimeException("server not configured!");
         }
@@ -79,6 +82,7 @@ public class ProxyServer {
             throw new RuntimeException("server port must be above 1024");
 		
 		dbServerList = initDbServerList(conf);
+        LOG.debug("Proxy server started..");
 	}
 	
 	public static Config getConf() {

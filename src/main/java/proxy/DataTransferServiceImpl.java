@@ -10,6 +10,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.ServerAddress;
 
 import java.net.UnknownHostException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,12 +21,15 @@ import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
+import org.apache.log4j.Logger;
 import util.Connection;
 
 public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTransferServiceImplBase {
 	private ProxyServer proxyServer;
 	
 	private static List<ManagedChannel> dbChannels = new ArrayList<ManagedChannel>();
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+	Logger logger = Logger.getLogger(DataTransferServiceImpl.class);
 	
 	DataTransferServiceImpl(ProxyServer proxyServer){
         super();
@@ -45,6 +50,8 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
 @Override
 	public void downloadChunk(grpc.FileTransfer.ChunkInfo request,
 	        io.grpc.stub.StreamObserver<grpc.FileTransfer.FileMetaData> responseObserver) {
+	Timestamp ts1  =  new Timestamp(System.currentTimeMillis());
+	logger.debug("Method downloadChunk started at "+ ts1);
 		String fileName = request.getFileName();
 		long chunkId = request.getChunkId();
 		long startSeqNum = request.getStartSeqNum();
@@ -81,12 +88,19 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
 			 }
 		 }
 		 responseObserver.onCompleted();
+	Timestamp ts2  =  new Timestamp(System.currentTimeMillis());
+	logger.debug("Method requestFileInfo ended at "+ ts2);
+	logger.debug("Method downloadChunk ended at "+ ts2);
+	logger.debug("Method downloadChunk execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
 	}
 
 //	UploadFile (Not supported yet/between external client and proxy server)
 	 @Override
 	    public io.grpc.stub.StreamObserver<grpc.FileTransfer.FileUploadData> uploadFile(
 	        io.grpc.stub.StreamObserver<grpc.FileTransfer.FileInfo> responseObserver) {
+
+		 Timestamp ts1  =  new Timestamp(System.currentTimeMillis());
+		 logger.debug("Method uploadFile started at "+ ts1);
 	            return new io.grpc.stub.StreamObserver<grpc.FileTransfer.FileUploadData>() {
 
 	                String fileName;
@@ -132,6 +146,9 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
 	                        .setFileName(fileName)
 	                        .build());
 	                    responseObserver.onCompleted();
+						Timestamp ts2  =  new Timestamp(System.currentTimeMillis());
+						logger.debug("Method uploadFile ended at "+ ts2);
+						logger.debug("Method uploadFile execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
 	                }
 	               };
 	            }
