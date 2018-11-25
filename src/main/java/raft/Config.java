@@ -21,7 +21,7 @@ public class Config {
 		try {
 			scan = new Scanner(new File("src/config.json"));
 		} catch (FileNotFoundException e){
-			System.err.println("Configuration file \"clusterAddresses.conf\" not found! Closing program");
+			System.out.println("Cannot find config.json!");
 			System.exit(1);
 		}
 

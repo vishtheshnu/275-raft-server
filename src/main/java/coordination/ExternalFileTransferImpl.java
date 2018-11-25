@@ -5,6 +5,7 @@ import grpc.FileTransfer;
 import io.atomix.AtomixClient;
 import io.atomix.collections.DistributedMap;
 import io.grpc.stub.StreamObserver;
+import raft.Config;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,10 +17,12 @@ import java.util.concurrent.ExecutionException;
 public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransferServiceImplBase {
 
 	private AtomixClient raftClient;
+	private HeartbeatService heartbeatService;
 
-	public ExternalFileTransferImpl(AtomixClient client){
+	public ExternalFileTransferImpl(AtomixClient client, HeartbeatService hbservice){
 		super();
 		raftClient = client;
+		heartbeatService = hbservice;
 	}
 
 	//RequestFileInfo (Used internally by other teams, not us)
@@ -111,7 +114,6 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 
 
 
-    @Override
 	public void GetFileLocation(FileTransfer.FileInfo request,
 								StreamObserver<FileTransfer.FileLocationInfo> responseObserver){
 
@@ -130,7 +132,6 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 	//UploadFile (Not supported yet/between external client and proxy server)
 
 	//ListFiles (between any client and This coordination server)
-	@Override
 	public void ListFiles(FileTransfer.RequestFileList request, StreamObserver<FileTransfer.FileList> responseObserver) throws ExecutionException, InterruptedException {
 		CompletableFuture<DistributedMap<Object, Object>> map = raftClient.getMap("fileLocations");
 		Iterator<Map.Entry<Object, Object>> it = raftClient.getMap("fileLocations")
@@ -150,8 +151,23 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 
 	//RequestFileUpload (though uploading is not supported, just return a list of all proxies)
 	public void RequestFileUpload(FileTransfer.FileUploadInfo request, StreamObserver<FileTransfer.ProxyList> responseObserver){
+		boolean [] onlineProxies = heartbeatService.getProxyStatus();
 
+		ArrayList<FileTransfer.ProxyInfo> proxyList = new ArrayList<FileTransfer.ProxyInfo>();
+		for(int i = 0; i < onlineProxies.length; i++){
+			if(!onlineProxies[i])
+				continue;
+			FileTransfer.ProxyInfo proxy = FileTransfer.ProxyInfo.newBuilder()
+					.setIp(Config.proxyAddresses.get(i).host())
+					.setPort(""+Config.proxyAddresses.get(i).port())
+					.build();
+			proxyList.add(proxy);
+		}
 
-
+		FileTransfer.ProxyList response = FileTransfer.ProxyList.newBuilder()
+				.addAllLstProxy(proxyList)
+				.build();
+		responseObserver.onNext(response);
+		responseObserver.onCompleted();
 	}
 }

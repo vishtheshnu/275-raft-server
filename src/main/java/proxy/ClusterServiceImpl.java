@@ -1,5 +1,6 @@
 package proxy;
 
+import com.cmpe275.generated.Heartbeat;
 import com.cmpe275.generated.clusterServiceGrpc;
 import com.cmpe275.generated.Chunk;
 import com.cmpe275.generated.ChunkAck;
@@ -24,8 +25,15 @@ public class ClusterServiceImpl extends clusterServiceGrpc.clusterServiceImplBas
 	@Override
 	public void liveliness(com.cmpe275.generated.Heartbeat request,
 	        io.grpc.stub.StreamObserver<com.cmpe275.generated.Heartbeat> responseObserver) {
-	      //TODO
-	    }
+
+		Heartbeat response = Heartbeat.newBuilder()
+				.setMessageId(request.getMessageId())
+				.setIsAck(true)
+				.build();
+
+		responseObserver.onNext(response);
+		responseObserver.onCompleted();
+	}
 	
 	@Override
 	public io.grpc.stub.StreamObserver<com.cmpe275.generated.Chunk> uploadFileChunk(

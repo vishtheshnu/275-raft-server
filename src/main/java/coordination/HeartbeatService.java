@@ -63,7 +63,7 @@ public class HeartbeatService {
 	}
 
 	private void createHBThread(clusterServiceGrpc.clusterServiceFutureStub stub, int index){
-		new Runnable() {
+		Runnable hbrun = new Runnable() {
 			public void run(){
 				boolean flag = true;
 				Heartbeat response = null;
@@ -93,6 +93,7 @@ public class HeartbeatService {
 					}
 				}
 			}
-		}.run();
+		};
+		(new Thread(hbrun)).start();
 	}
 }
