@@ -23,6 +23,7 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 	//Liveliness (This file sends the message to proxies)
 
 	//updateChunkData (From edge to This Coordination server)
+	@Override
 	public void updateChunkData(ChunkData request, StreamObserver<ChunkDataResponse> responseObserver){
 
 		String mapvalue = null;
@@ -53,6 +54,7 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 	}
 
 	//isFilePresent (From edge to This coordination server)
+	@Override
 	public void isFilePresent(FileQuery request, StreamObserver<FileResponse> responseObserver){
 
 		String mapvalue = null;
@@ -89,5 +91,134 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 	}
 
 	//uploadFileChunk (From client to proxy; not needed here!)
+
+	// initiateFileUpload
+	@Override
+	  public void initiateFileUpload(com.cmpe275.generated.FileUploadRequest request,
+	        io.grpc.stub.StreamObserver<com.cmpe275.generated.FileResponse> responseObserver) {
+			
+			System.out.println("initiateFileUpload Method arrived");
+	          ArrayList<ChunkData> chunks = new ArrayList<ChunkData>();
+	          ArrayList<String> proxies = new ArrayList<String>();
+	          ArrayList<String> liveProxies = new ArrayList<String>();
+	        
+	          
+	          String fileName = request.getFileName();
+	          long fileSize = request.getSize();
+	          long maxChunks = request.getMaxChunks();
+	          long requestId = request.getRequestId();
+
+	          for(Address addr : Config.proxyAddresses){
+		  			proxies.add(addr.host()+":"+addr.port());
+		          }
+	          /**
+	           * For tests
+	           */
+//	          proxies.add("localhost:8080");
+//	          proxies.add("localhost:8081");
+//	          proxies.add("localhost:8082");
+//	          proxies.add("localhost:8083");
+//	          proxies.add("localhost:8084");
+	          
+	         System.out.println("Creating a map");
+	         raftClient.getMap("fileLocations")
+	  		.thenCompose(m -> m.put("bar", "Hello World!"))
+	  		.join();
+	         
+	         String value = "";
+				try {
+					value = raftClient.getMap("fileLocations")
+					          .thenCompose(m -> m.get(fileName + "_0"))
+					          .thenApply(a -> (String) a)
+					          .get();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					System.out.println(e);
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					System.out.println(e);
+					e.printStackTrace();
+				}
+		  		System.out.println("Retrieved value of bar: "+value);
+		  		
+		  		FileResponse.Builder responseBuilder = FileResponse.newBuilder();
+		  		
+		  		//Check if the file is already present
+		  		if( value != null) {
+		  			responseBuilder.setIsFound(true); // Does not return the field to Client if set false
+		  			      
+		  		} else {
+		  				
+		  			boolean[] proxyStatus = heartbeat.getProxyStatus();
+		  			
+		  			 /**
+			           * For tests
+			           */
+		  			
+//		  			boolean[] proxyStatus = { true, false, true, true, false } ;
+		  			
+		  			int proxyStatusSize = proxyStatus.length;
+
+		  			for(int index=0 ; index<proxyStatusSize; index++) {
+		  				if(proxyStatus[index]) {
+		  					liveProxies.add(proxies.get(index));
+		  				}		  					
+		  			}
+		  			
+			          int n = liveProxies.size(); 
+			          
+			          if(n== 0) {
+			        	  	System.out.println("Cannot upload right now! No live proxies available.");
+			        	  	throw new ArithmeticException();
+			          } else {
+			        	  
+				          for(int i=0; i < maxChunks; i++){
+				            String uniqueId = fileName + "_" + Integer.toString(i);
+				            int hash = uniqueId.hashCode();
+				            
+				            String allotedProxy = liveProxies.get(Math.abs(hash % n));
+				            String[] values = allotedProxy.split(":");
+				            String ip = values[0];
+				            String port = values[1];
+
+				            System.out.println("ip: " + ip);
+				            System.out.println("port: " + port);
+				            
+				            String mapObject = uniqueId + "," + fileName + "," 
+							         + Integer.toString(i) + "," +  Long.toString(maxChunks)
+							         + "," + "false" + "," + ip + "," + port;
+				            System.out.println("Creating a map");
+					         raftClient.getMap("fileLocations")
+					  		.thenCompose(m -> m.put(uniqueId, mapObject))
+					  		.join();
+					         
+					         
+				            ChunkData eachChunk = ChunkData.newBuilder()
+				            .setIsAvailable(false)
+				            .setPort(port)
+				            .setMaxChunks(maxChunks)
+				            .setFileName(fileName)
+				            .setChunkId((long)i) // Does not return this field to Client if set to 0
+				            .setIp(ip)
+				            .build();
+
+				            chunks.add(eachChunk);
+				            
+				          }
+
+				          responseBuilder.setIsFound(false) // Does not return the field to Client if set false
+				          .setRequestId(requestId)
+				          .addAllChunks(chunks);
+			          }
+			          
+		  		}
+	          
+	          FileResponse response = responseBuilder.build();
+	          responseObserver.onNext(response);
+	          
+	        responseObserver.onCompleted();
+
+	    }
 
 }
