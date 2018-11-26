@@ -11,14 +11,14 @@ public class ProxyRpcServer {
 	private DataTransferServiceImpl dataTransferService;
 	private ClusterServiceImpl clusterService;
 	private ProxyServer proxyServer;
-	private Connection CoordSvr; //TODO Check this
 	private Server server;
 	
 	ProxyRpcServer(String svrConf){
 		proxyServer = new ProxyServer(svrConf).getInstance(svrConf);
         dataTransferService = new DataTransferServiceImpl(this.proxyServer);
         clusterService = new ClusterServiceImpl(this.proxyServer);
-        server = ServerBuilder.forPort(proxyServer.getServerPort())
+//        server = ServerBuilder.forPort(proxyServer.getServerPort()) // TODO
+        		 server = ServerBuilder.forPort(3000)
                 .addService(dataTransferService)
                 .addService(clusterService)
                 .build();

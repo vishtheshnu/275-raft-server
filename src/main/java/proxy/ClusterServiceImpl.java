@@ -27,6 +27,8 @@ import java.util.Base64;
 public class ClusterServiceImpl extends clusterServiceGrpc.clusterServiceImplBase {
 	
 	private ProxyServer proxyServer;
+	protected MongoClient mc = DataTransferServiceImpl.mc;
+	
 	
 	ClusterServiceImpl(ProxyServer proxyServer){
         super();
@@ -71,14 +73,8 @@ public class ClusterServiceImpl extends clusterServiceGrpc.clusterServiceImplBas
 	    	  		long seqMax = ch.getSeqMax();
 	    	  		String data = Base64.getEncoder().encodeToString(ch.getData().toByteArray());
 	    	  		
-	    	  		 MongoClient mongoClient = null;
-	                    try {
-	                        mongoClient = new MongoClient(Arrays.asList(new ServerAddress(ProxyServer.dbServerList.get(0).ipAddress, ProxyServer.dbServerList.get(0).port),
-	                                new ServerAddress(ProxyServer.dbServerList.get(1).ipAddress, ProxyServer.dbServerList.get(1).port),
-	                                new ServerAddress(ProxyServer.dbServerList.get(2).ipAddress, ProxyServer.dbServerList.get(2).port)));
-	                    } catch (UnknownHostException e) {
-	                        e.printStackTrace();
-	                    }
+	    	  		 MongoClient mongoClient = mc;
+	                    
 	                    DB db = mongoClient.getDB( "file-storage" );
 	                    DBCollection coll = db.getCollection("own-files");
 	                    

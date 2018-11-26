@@ -23,9 +23,12 @@ import io.grpc.ManagedChannelBuilder;
 
 import org.apache.log4j.Logger;
 import util.Connection;
+import db.ReplicaSet;
 
 public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTransferServiceImplBase {
 	private ProxyServer proxyServer;
+	protected static MongoClient mc;
+	
 	
 //	private static List<ManagedChannel> dbChannels = new ArrayList<ManagedChannel>();
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
@@ -34,6 +37,8 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
 	DataTransferServiceImpl(ProxyServer proxyServer){
         super();
         this.proxyServer = proxyServer;
+      	ReplicaSet rs = new ReplicaSet();
+      	this.mc = rs.initializeMongoClient();
 //        initConnections();
     }
 	
@@ -56,14 +61,8 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
 		long chunkId = request.getChunkId();
 		long startSeqNum = request.getStartSeqNum();
 		
-		MongoClient mongoClient = null;
-		 try {
-             mongoClient = new MongoClient(Arrays.asList(new ServerAddress(ProxyServer.dbServerList.get(0).ipAddress, ProxyServer.dbServerList.get(0).port),
-                     new ServerAddress(ProxyServer.dbServerList.get(1).ipAddress, ProxyServer.dbServerList.get(1).port),
-                     new ServerAddress(ProxyServer.dbServerList.get(2).ipAddress, ProxyServer.dbServerList.get(2).port)));
-         } catch (UnknownHostException e) {
-             e.printStackTrace();
-         }
+		MongoClient mongoClient = mc;
+	
 		DB db = mongoClient.getDB( "file-storage" ); 
 		DBCollection coll = db.getCollection("files");
 		
@@ -113,14 +112,8 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
 	                    long seqNum = fileUploadData.getSeqNum();
 	                    long seqMax = fileUploadData.getSeqMax();
 
-	                    MongoClient mongoClient = null;
-	                    try {
-	                        mongoClient = new MongoClient(Arrays.asList(new ServerAddress(ProxyServer.dbServerList.get(0).ipAddress, ProxyServer.dbServerList.get(0).port),
-	                                new ServerAddress(ProxyServer.dbServerList.get(1).ipAddress, ProxyServer.dbServerList.get(1).port),
-	                                new ServerAddress(ProxyServer.dbServerList.get(2).ipAddress, ProxyServer.dbServerList.get(2).port)));
-	                    } catch (UnknownHostException e) {
-	                        e.printStackTrace();
-	                    }
+	                    MongoClient mongoClient = mc;
+	                    
 	                    DB db = mongoClient.getDB( "file-storage" );
 	                    DBCollection coll = db.getCollection("class-files");
 	                    

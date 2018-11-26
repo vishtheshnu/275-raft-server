@@ -17,6 +17,9 @@ public class testClient {
 		final ManagedChannel channel = ManagedChannelBuilder.forTarget("localhost:3000")
 		        .usePlaintext(true)
 		        .build();
+		
+		
+		
 	}
 
 }

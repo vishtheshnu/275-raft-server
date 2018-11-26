@@ -16,7 +16,7 @@ public class ProxyServer {
     protected static AtomicReference<ProxyServer> instance = new AtomicReference<ProxyServer>();
     protected static Config conf;
     public static String serverConfigString;
-    public static List<Connection> dbServerList;
+    public static Connection dbLocation;
 
  // host details
     protected static Integer hostPort;
@@ -34,25 +34,16 @@ public class ProxyServer {
     }
     
     
-    private List<Connection> initDbServerList(Config conf){
+    private Connection initDbServer(Config conf){
         LOG.debug("Initialising Mongo Instances...");
         List<Connection> db_svr_list = new ArrayList<Connection>();
 
-        Connection svr_1 = new Connection(
-                            conf.getString(this.serverConfigString+".dbServerList.svrIP_1"),
-                            conf.getInt(this.serverConfigString+".dbServerList.svrPort_1"));
-        Connection svr_2 = new Connection(
-                            conf.getString(this.serverConfigString+".dbServerList.svrIP_2"),
-                            conf.getInt(this.serverConfigString+".dbServerList.svrPort_2"));
-        Connection svr_3 = new Connection(
-                            conf.getString(this.serverConfigString+".dbServerList.svrIP_3"),
-                            conf.getInt(this.serverConfigString+".dbServerList.svrPort_3"));
-
-        db_svr_list.add(svr_1);
-        db_svr_list.add(svr_2);
-        db_svr_list.add(svr_3);
+        Connection dbLocation = new Connection(
+                            conf.getString(this.serverConfigString+".dbServer.svrIP"),
+                            conf.getInt(this.serverConfigString+".dbServer.svrPort"));
+ 
         LOG.debug("Mongo Instances Initialised...");
-        return db_svr_list;
+        return dbLocation;
     }
     
 	private void init() {
@@ -74,7 +65,7 @@ public class ProxyServer {
         if (hostPort <= 1024)
             throw new RuntimeException("server port must be above 1024");
 		
-		dbServerList = initDbServerList(conf);
+        dbLocation = initDbServer(conf);
         LOG.debug("Proxy server started..");
 	}
 	
@@ -94,8 +85,8 @@ public class ProxyServer {
         return hostIP;
     }
 
-    public static List<Connection> getDbServerList() {
-        return dbServerList;
+    public static Connection getDbServer() {
+        return dbLocation;
     }
 
 }
