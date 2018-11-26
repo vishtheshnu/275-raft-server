@@ -115,7 +115,7 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
 	                    DB db = mongoClient.getDB( "file-storage" );
 	                    DBCollection coll = db.getCollection("files");
 	                    
-	                    BasicDBObject findQuery = new BasicDBObject("fileName", fileName)
+	                    BasicDBObject findQuery = new BasicDBObject().append("fileName", fileName)
 	                            .append("chunkId", chunkId)
 	                            .append("seqMax", seqMax);
 	                    DBObject listItem = new BasicDBObject("seqInfo", new BasicDBObject("seqNum", seqNum).append("seqData",data));
