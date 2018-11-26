@@ -12,6 +12,7 @@ public class ProxyRpcServer {
 	private ClusterServiceImpl clusterService;
 	private ProxyServer proxyServer;
 	private Server server;
+	private static String svrConf ="svr1";
 	
 	ProxyRpcServer(String svrConf){
 		proxyServer = new ProxyServer(svrConf).getInstance(svrConf);
@@ -52,7 +53,7 @@ public class ProxyRpcServer {
         if(args.length != 1){
             System.out.println("Enter one of svr1, svr2, svr3 or svr4 as the command line arg to start.");
         }
-        ProxyRpcServer myProxyServer= new ProxyRpcServer(args[0]);
+        ProxyRpcServer myProxyServer= new ProxyRpcServer("svr1");
         myProxyServer.start();
         try {
         		myProxyServer.blockUntilShutdown();

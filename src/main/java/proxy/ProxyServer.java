@@ -24,8 +24,8 @@ public class ProxyServer {
     protected static String hostIP;
     
     public ProxyServer(String configArg){
-    		ProxyServer.conf = ConfigFactory.load();
-        ProxyServer.serverConfigString = configArg;
+    	//	ProxyServer.conf = ConfigFactory.load();
+        //ProxyServer.serverConfigString = configArg;
     }
     
     public static ProxyServer getInstance(String conf){

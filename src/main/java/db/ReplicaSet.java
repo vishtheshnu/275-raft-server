@@ -19,12 +19,13 @@ public class ReplicaSet {
 	public MongoClient initializeMongoClient(){
 		 MongoClient mc = null;
 		 try {
-			  mc = new MongoClient(Arrays.asList(new ServerAddress("10.0.20.1", 27017),
+			/*  mc = new MongoClient(Arrays.asList(new ServerAddress("10.0.20.1", 27017),
 	          new ServerAddress("10.0.20.2", 27017),
 	          new ServerAddress("10.0.20.3", 27017),
 	          new ServerAddress("10.0.20.4", 27017),
 	          new ServerAddress("10.0.20.1", 27018)));
-			  
+			  */
+			 mc = new MongoClient("localhost",27017);
 	      	} catch (UnknownHostException e) {
 	      		System.out.println("Error:" + e);
 	      		e.printStackTrace();
