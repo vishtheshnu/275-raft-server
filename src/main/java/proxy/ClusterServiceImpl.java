@@ -75,8 +75,9 @@ public class ClusterServiceImpl extends clusterServiceGrpc.clusterServiceImplBas
 	    	  		
 	    	  		 MongoClient mongoClient = mc;
 	                    
-	                    DB db = mongoClient.getDB("file-storage" );
-	                    DBCollection coll = db.getCollection("own-files");
+
+	                    DB db = mongoClient.getDB( "file-storage" );
+	                    DBCollection coll = db.getCollection("files");
 	                    
 	                    BasicDBObject findQuery = new BasicDBObject().append("filename", fileName)
 	                            .append("chunkId", chunkId)
@@ -93,7 +94,6 @@ public class ClusterServiceImpl extends clusterServiceGrpc.clusterServiceImplBas
 	    	  		t.printStackTrace();
 	    	  		System.out.println(t.getMessage());
 	    	  		responseObserver.onError(t);
-	    	  		
 	    	  	}
 	    	  	
 	    	  	@Override

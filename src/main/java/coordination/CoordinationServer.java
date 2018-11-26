@@ -35,8 +35,6 @@ public class CoordinationServer {
 		grpcServer.startServer();
 
 		System.out.println("Created grpc server! Now testing connection to raft server");
-
-
 	}
 
 	public static void testConnection(AtomixClient client) throws Exception{

@@ -33,7 +33,7 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 	}
 //Liveliness (This file sends the message to proxies)
 
-	//updateChunkData (From edge to This Coordination server)
+	//updateChunkData (From proxy to This Coordination server)
 	@Override
 	public void updateChunkData(ChunkData request, StreamObserver<ChunkDataResponse> responseObserver){
 

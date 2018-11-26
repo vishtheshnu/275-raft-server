@@ -14,6 +14,8 @@ public class ProxyRpcServer {
 	private Server server;
 	private static String svrConf ="svr1";
 	
+	private String svrConf ="svr1";
+	
 	ProxyRpcServer(String svrConf){
 		proxyServer = new ProxyServer(svrConf).getInstance(svrConf);
         dataTransferService = new DataTransferServiceImpl(this.proxyServer);
@@ -28,7 +30,7 @@ public class ProxyRpcServer {
 	private void start(){
         try {
             server.start();
-            System.out.println("grpc server started");
+            System.out.println("Proxy RPC server started");
             server.awaitTermination();
         }catch (IOException e){
             System.err.println("IO excpetion with starting the grpc server!");

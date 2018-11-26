@@ -9,6 +9,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.ServerAddress;
 
+
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -17,20 +18,24 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Base64;
 
+import com.cmpe275.generated.ChunkData;
+import com.cmpe275.generated.ChunkDataResponse;
+import com.cmpe275.generated.clusterServiceGrpc;
 import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import util.Connection;
 import db.ReplicaSet;
+import coordination.*;
 
 public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTransferServiceImplBase {
 	private ProxyServer proxyServer;
 	protected static MongoClient mc;
 	
-	
-//	private static List<ManagedChannel> dbChannels = new ArrayList<ManagedChannel>();
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
 	Logger logger = Logger.getLogger(DataTransferServiceImpl.class);
 	
@@ -39,16 +44,7 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
         this.proxyServer = proxyServer;
       	ReplicaSet rs = new ReplicaSet();
       	this.mc = rs.initializeMongoClient();
-//        initConnections();
     }
-	
-//	public static void initConnections(){
-//        for(Connection c : ProxyServer.dbServerList){
-//            ManagedChannel ch = ManagedChannelBuilder.forAddress(c.ipAddress, c.port)
-//            		.usePlaintext(true).build();
-//            dbChannels.add(ch);
-//        }
-//	}
         
    
 //DownloadChunk (between external client and proxy server)
@@ -59,29 +55,31 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
 	logger.debug("Method downloadChunk started at "+ ts1);
 		String fileName = request.getFileName();
 		long chunkId = request.getChunkId();
-		long startSeqNum = request.getStartSeqNum();
+		int startSeqNum = (int)request.getStartSeqNum();
 		
 		MongoClient mongoClient = mc;
 	
 		DB db = mongoClient.getDB( "file-storage" ); 
 		DBCollection coll = db.getCollection("files");
-		
 		DBObject query = new BasicDBObject("fileName", fileName).append("chunkId", chunkId);				
 				
 		DBCursor cursor = coll.find(query, new BasicDBObject("seqInfo", 1).append("seqMax", 1));	
 	
 		BasicDBList sequenceList = (BasicDBList) cursor.one().get("seqInfo");
-		String maxSeq = (String)cursor.one().get("seqMax");
+		double maxSeq = (double)cursor.one().get("seqMax");
+		
 		 for (int i = 0; i < sequenceList.size(); i++) {
 			 BasicDBObject seqObj = (BasicDBObject) sequenceList.get(i);
-			 long currentSeq = Long.parseLong(seqObj.getString("seqNum"));
-			 if( currentSeq >= startSeqNum && currentSeq <= Long.parseLong(maxSeq)) {
+			 String seqNumString = seqObj.getString("seqNum");
+			 String edited = seqNumString.substring(0, seqNumString.length()-2);
+			 int currentSeq = Integer.parseInt(edited);
+			 if( currentSeq >= startSeqNum && currentSeq <= (long)maxSeq) {
 				 //TODO Server Streaming using seqData.toByteArray()
 				 grpc.FileTransfer.FileMetaData fileMetaData = grpc.FileTransfer.FileMetaData.newBuilder()
 				 .setChunkId(chunkId)
 				 .setData(ByteString.copyFrom(Base64.getDecoder().decode(seqObj.getString("seqData"))))
-				 .setSeqNum(i)
-				 .setSeqMax(Long.parseLong(maxSeq))
+				 .setSeqNum(startSeqNum)
+				 .setSeqMax((long)maxSeq)
 				 .build();
 				 responseObserver.onNext(fileMetaData);
 			 }
@@ -115,7 +113,7 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
 	                    MongoClient mongoClient = mc;
 	                    
 	                    DB db = mongoClient.getDB( "file-storage" );
-	                    DBCollection coll = db.getCollection("class-files");
+	                    DBCollection coll = db.getCollection("files");
 	                    
 	                    BasicDBObject findQuery = new BasicDBObject("fileName", fileName)
 	                            .append("chunkId", chunkId)
@@ -139,10 +137,30 @@ public class DataTransferServiceImpl extends grpc.DataTransferServiceGrpc.DataTr
 	                        .setFileName(fileName)
 	                        .build());
 	                    responseObserver.onCompleted();
+	                    updateHashMap();
 						Timestamp ts2  =  new Timestamp(System.currentTimeMillis());
 						logger.debug("Method uploadFile ended at "+ ts2);
 						logger.debug("Method uploadFile execution time : "+ (ts2.getTime() - ts1.getTime()) + "ms");
 	                }
+
+
+					private void updateHashMap() {
+						// TODO Give the address of coordination server
+						final ManagedChannel channel = ManagedChannelBuilder.forTarget("localhost:3000")
+						        .usePlaintext(true)
+						        .build();
+						
+						clusterServiceGrpc.clusterServiceBlockingStub blockingStub = clusterServiceGrpc.newBlockingStub(channel);
+						ChunkData chunkDataRequest = ChunkData.newBuilder().setChunkId(chunkId).setFileName(fileName).build();
+						ChunkDataResponse resp;
+						try {
+								blockingStub.updateChunkData(chunkDataRequest);
+							} catch (StatusRuntimeException e) {
+							  System.out.println("Error" + e);
+							  return;
+							}
+						
+					}
 	               };
 	            }
 }
