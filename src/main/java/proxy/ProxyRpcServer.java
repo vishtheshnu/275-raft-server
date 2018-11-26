@@ -12,9 +12,9 @@ public class ProxyRpcServer {
 	private ClusterServiceImpl clusterService;
 	private ProxyServer proxyServer;
 	private Server server;
-	private static String svrConf ="svr1";
-	
-	private String svrConf ="svr1";
+//	private static String svrConf ="svr1";
+//	
+//	private String svrConf ="svr1";
 	
 	ProxyRpcServer(String svrConf){
 		proxyServer = new ProxyServer(svrConf).getInstance(svrConf);
