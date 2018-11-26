@@ -25,6 +25,9 @@ public class ReplicaSet {
 	          new ServerAddress("10.0.20.3", 27017),
 	          new ServerAddress("10.0.20.4", 27017),
 	          new ServerAddress("10.0.20.1", 27018)));
+
+			 
+			 //smc = new MongoClient("localhost", 27017);
 			  
 	      	} catch (UnknownHostException e) {
 	      		System.out.println("Error:" + e);

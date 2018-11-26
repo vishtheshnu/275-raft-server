@@ -16,6 +16,8 @@ public class ProxyRpcServer {
 //	
 //	private String svrConf ="svr1";
 	
+	private String svrConf ="svr1";
+	
 	ProxyRpcServer(String svrConf){
 		proxyServer = new ProxyServer(svrConf).getInstance(svrConf);
         dataTransferService = new DataTransferServiceImpl(this.proxyServer);
