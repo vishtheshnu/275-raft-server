@@ -7,6 +7,8 @@ import io.atomix.copycat.server.storage.Storage;
 import io.atomix.copycat.server.storage.StorageLevel;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Used to create a single node on a localhost cluster. Paramater: int - number of node. Starts at 0
@@ -37,14 +39,16 @@ public class SingleCluster {
 		System.out.println("This node's address: "+address);
 
 		SingleCluster myNode = new SingleCluster();
-		myNode.createCluster(address.host(), address.port());
+		boolean isHost = false;
+		if(address.port() == 8700)
+			isHost = true;
+		myNode.createCluster(address.host(), address.port(), false);
 
 		System.out.println("Created node and joined cluster");
 	}
 
-	public void createCluster(String host, int port){
-		new Runnable(){
-			public void run(){
+	public void createCluster(String host, int port, boolean isHost){
+
 				final Storage storage = Storage.builder()
 						.withDirectory(new File("logs"))
 						.withStorageLevel(StorageLevel.DISK)
@@ -56,9 +60,15 @@ public class SingleCluster {
 						.withTransport(new NettyTransport())
 						.build();
 
-				replica.join(new Address("localhost", BASE_PORT)).join();
-			}
-		}.run();
+				if(isHost) {
+					CompletableFuture<AtomixReplica> future = replica.bootstrap();
+					future.join();
+				}
+				else {
+					replica.join(Config.raftAddresses).join();
+				}
+
+
 
 	}
 }

@@ -62,7 +62,9 @@ public class HeartbeatService {
 		LOG.debug("Starting the Hearbeat service between Proxy and Co-ordination server...");
 		//Create a new heartbeat thread for each channel/stub
 		for(int i = 0; i < stubs.size(); i++){
+			System.out.println("Creating HB thread");
 			createHBThread(stubs.get(i), i);
+			System.out.println("Created HB thread");
 		}
 		//stub.isFilePresent(null).get()
 		LOG.debug("Started the Hearbeat service between Proxy and Co-ordination server...");
@@ -75,8 +77,10 @@ public class HeartbeatService {
 				Heartbeat response = null;
 				while(flag) {
 					try {
-						response = stubs.get(0).liveliness(request).get(10, TimeUnit.SECONDS);
+						System.out.println("Sending request for proxy "+index);
+						response = stubs.get(index).liveliness(request).get(10, TimeUnit.SECONDS);
 					} catch (Exception e) {
+						System.out.println("No response/error from proxy "+index);
 						//Set to false, sleep for 30 seconds, then retry
 						synchronized (isProxyAccessible) {
 							isProxyAccessible[index] = false;
@@ -93,6 +97,7 @@ public class HeartbeatService {
 
 					//response is a success, set flag to true
 					if(response != null && response.getIsAck()){
+						System.out.println("Response from proxy "+index);
 						synchronized (isProxyAccessible){
 							isProxyAccessible[index] = true;
 						}

@@ -16,22 +16,27 @@ public class CoordinationServer {
 		new Config();
 		List<Address> clusterAddresses = Config.raftAddresses;
 
+		/*
 		//Construct client to communicate with raft server
 		AtomixClient client = AtomixClient.builder()
 				.withTransport(new NettyTransport())
 				.build();
 
 		//Connect with raft server
-		client.connect(clusterAddresses).join();
+		client.connect(Config.raftAddresses).thenRun(()->{System.out.println("Connected to the server baby!!");});
+		//client.connect(Config.raftAddresses).join();
+
+		System.out.println("Connected to raft server!");
 
 		//testConnection(client);
+		*/
 
 		//Initialize Heartbeat service
 		HeartbeatService hbservice = new HeartbeatService();
 		hbservice.startHeartbeatService();
 
 		//Initialize gRPC server
-		grpcServer = new GrpcServer(client, hbservice);
+		grpcServer = new GrpcServer(null, hbservice);
 		grpcServer.startServer();
 
 		System.out.println("Created grpc server! Now testing connection to raft server");

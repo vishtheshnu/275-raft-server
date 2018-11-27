@@ -10,25 +10,22 @@ import org.apache.log4j.Logger;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransferServiceImplBase {
 
-	private AtomixClient raftClient;
+	private HashMap<String, Object> storage;
 	private HeartbeatService heartbeatService;
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
 	Logger logger = Logger.getLogger(ExternalFileTransferImpl.class);
 
-	public ExternalFileTransferImpl(AtomixClient client, HeartbeatService hbservice){
+	public ExternalFileTransferImpl(HashMap<String, Object> storage, HeartbeatService hbservice){
 
 		super();
-		raftClient = client;
+		this.storage = storage;
 		heartbeatService = hbservice;
 	}
 

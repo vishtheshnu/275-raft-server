@@ -9,6 +9,7 @@ import proxy.ProxyServer;
 import raft.Config;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Starts a grpc server with the defined proto file implementations
@@ -19,13 +20,15 @@ public class GrpcServer{
 	private Server server;
 	private AtomixClient raftClient;
 
+	private HashMap<String, Object> storage;
+
 	public GrpcServer(AtomixClient client, HeartbeatService hbService){
 		System.out.println("Inside grpc server constructor");
-		server = ServerBuilder.forPort(Config.coordServerPort)
-				.addService(new InternalFileTransferImpl(raftClient, hbService))
-				.addService(new ExternalFileTransferImpl(raftClient, hbService))
-				.build();
 		raftClient = client;
+		server = ServerBuilder.forPort(Config.coordServerPort)
+				.addService(new InternalFileTransferImpl(storage, hbService))
+				.addService(new ExternalFileTransferImpl(storage, hbService))
+				.build();
 		System.out.print("initialized server");
 	}
 

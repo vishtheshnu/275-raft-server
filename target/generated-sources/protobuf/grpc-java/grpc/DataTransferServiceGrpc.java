@@ -19,7 +19,7 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall;
  */
 @javax.annotation.Generated(
     value = "by gRPC proto compiler (version 1.7.0)",
-    comments = "Source: FileTransfer.proto")
+    comments = "Source: file_transfer.proto")
 public final class DataTransferServiceGrpc {
 
   private DataTransferServiceGrpc() {}

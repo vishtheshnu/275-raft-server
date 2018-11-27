@@ -10,18 +10,19 @@ import raft.Config;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceImplBase {
 
-	private AtomixClient raftClient;
+	private HashMap<String, Object> storage;
 	private HeartbeatService heartbeat;
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
 	Logger logger = Logger.getLogger(InternalFileTransferImpl.class);
 
-	public InternalFileTransferImpl(AtomixClient client, HeartbeatService hbService){
+	public InternalFileTransferImpl(HashMap<String, Object> storage, HeartbeatService hbService){
 		super();
-		raftClient = client;
+		this.storage = storage;
 		heartbeat = hbService;
 	}
 
@@ -40,16 +41,8 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 		Timestamp ts1  =  new Timestamp(System.currentTimeMillis());
 		logger.debug("Method updateChunkData started at "+ ts1);
 		String mapvalue = null;
-		try {
-			mapvalue = raftClient.getMap("fileLocations")
-					.thenCompose(m -> m.get(request.getFileName()+"_"+request.getChunkId()))
-					.thenApply(a -> (String) a)
-					.get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
+
+		mapvalue = (String)storage.get(request.getFileName()+"_"+request.getChunkId());
 
 		String[] arr = mapvalue.split(",");
 		arr[4]= "true";
