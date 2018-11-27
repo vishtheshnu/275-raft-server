@@ -45,20 +45,8 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
       grpc.FileTransfer.FileLocationInfo response;
      
       String value = "";
-		try {
-			value = raftClient.getMap("fileLocations")
-			          .thenCompose(m -> m.get(fileName + "_0"))
-			          .thenApply(a -> (String) a)
-			          .get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
-			e.printStackTrace();
-		}
+      value = (String)storage.get(fileName + "_0");
+
 		
 		if(value == null) {
 			response = grpc.FileTransfer.FileLocationInfo.newBuilder()
@@ -75,21 +63,8 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 			proxyList.add(firstProxy);
 			String chunkInfo = "";
 			for(int i=1; i<maxChunks; i++) {
-				try {
-					String uniqueId = fileName + "_" + Integer.toString(i);
-					chunkInfo = raftClient.getMap("fileLocations")
-					          .thenCompose(m -> m.get(uniqueId))
-					          .thenApply(a -> (String) a)
-					          .get();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					System.out.println(e);
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					System.out.println(e);
-					e.printStackTrace();
-				}
+				String uniqueId = fileName + "_" + Integer.toString(i);
+				chunkInfo = (String)storage.get(uniqueId);
 				
 				if(chunkInfo == null || chunkInfo == "") {
 					// TODO: **** isChunkFound required ****
@@ -153,18 +128,14 @@ public class ExternalFileTransferImpl extends DataTransferServiceGrpc.DataTransf
 		Timestamp ts1  =  new Timestamp(System.currentTimeMillis());
 		logger.debug("Method ListFiles started at "+ ts1);
 
-		CompletableFuture<DistributedMap<Object, Object>> map = raftClient.getMap("fileLocations");
-		Iterator<Map.Entry<Object, Object>> it = raftClient.getMap("fileLocations")
-				.thenCompose(m -> m.entrySet())
-				.thenApply(a -> a.iterator())
-				.get();
+		Iterator<Map.Entry<String, Object>> it = storage.entrySet().iterator();
 		List<String> list = new ArrayList<String>();
 
 		FileTransfer.FileList.Builder responseBuilder = grpc.FileTransfer.FileList.newBuilder();
 		int count =0;
 		while(it.hasNext()){
 
-			Map.Entry<Object, Object> entry  = it.next();
+			Map.Entry<String, Object> entry  = it.next();
 			String[] value = ((String)entry.getValue()).split(",");
 			responseBuilder.setLstFileNames(count, value[1]);
 			count++;
