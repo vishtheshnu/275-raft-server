@@ -70,17 +70,9 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 		Timestamp ts1  =  new Timestamp(System.currentTimeMillis());
 		logger.debug("Method isFilePresent started at "+ ts1);
 		String mapvalue = null;
-		try {
-			mapvalue = raftClient.getMap("fileLocations").thenCompose(m -> m.get(request.getFileName()+"_0"))
-					.thenApply(a -> (String) a)
-					.get();
 
+		mapvalue = (String) storage.get(request.getFileName()+"_0");
 
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
 
 		String[] arr = mapvalue.split(",");
 
@@ -137,25 +129,10 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 //	          proxies.add("localhost:8084");
 	          
 	         System.out.println("Creating a map");
-	         raftClient.getMap("fileLocations")
-	  		.thenCompose(m -> m.put("bar", "Hello World!"))
-	  		.join();
+	         storage.put("bar", "Hello World!");
 	         
 	         String value = "";
-				try {
-					value = raftClient.getMap("fileLocations")
-					          .thenCompose(m -> m.get(fileName + "_0"))
-					          .thenApply(a -> (String) a)
-					          .get();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					System.out.println(e);
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					System.out.println(e);
-					e.printStackTrace();
-				}
+
 		  		System.out.println("Retrieved value of bar: "+value);
 		  		
 		  		FileResponse.Builder responseBuilder = FileResponse.newBuilder();
@@ -205,9 +182,7 @@ public class InternalFileTransferImpl extends clusterServiceGrpc.clusterServiceI
 							         + Integer.toString(i) + "," +  Long.toString(maxChunks)
 							         + "," + "false" + "," + ip + "," + port;
 				            System.out.println("Creating a map");
-					         raftClient.getMap("fileLocations")
-					  		.thenCompose(m -> m.put(uniqueId, mapObject))
-					  		.join();
+				            storage.put(uniqueId, mapObject);
 					         
 					         
 				            ChunkData eachChunk = ChunkData.newBuilder()
